@@ -10,3 +10,12 @@ Handlers.add("tags",Handlers.utils.hasMatchingTag("Action","tag"),function (msg)
   Handlers.utils.reply(data)(msg)
 end)
 Db = Db or {}
+Handlers.add("set",Handlers.utils.hasMatchingTag("Action","set"),function (msg)
+  Db[msg.Tags.key] = msg.Tags.value
+  local s = "Added "..msg.Tags.key.." as key and "..msg.Tags.value.." as value"
+  Handlers.utils.reply(s)(msg)
+end)
+Handlers.add("get",Handlers.utils.hasMatchingTag("Action","get"),function (msg)
+  local s = "The value for "..msg.Tags.keys.." is "..Db[msg.Tags.keys]
+  Handlers.utils.reply(s)(msg)
+end)
