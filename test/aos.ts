@@ -1,7 +1,27 @@
 import fs from "fs";
-import AoLoader from "@permaweb/ao-loader";
+import AoLoader, { handleFunction } from "@permaweb/ao-loader";
+import path from "path";
+interface Tag {
+  name: string;
+  value: string;
+}
+
+interface InputData {
+  Data?: string;
+  Tags?: Array<{ [key: string]: string | undefined }>;
+  [key: string]:
+    | string
+    | Array<{ [key: string]: string | undefined }>
+    | undefined;
+}
+
+interface OutputData {
+  Data?: string;
+  Tags: Tag[];
+}
+
 export default class AOS {
-  wasm = fs.readFileSync("/./../process.wasm");
+  wasm = fs.readFileSync(path.join(__dirname) + "/../process.wasm");
   code: string;
   process_id: string;
   module_id: string;
@@ -9,38 +29,53 @@ export default class AOS {
   from: string;
   height: number;
   memory: null | ArrayBuffer;
+  handle: null | handleFunction;
   constructor(
     code: string,
     process_id = "9876",
     module_id = "9876",
-    owner = "Arweave",
-    from = "John"
+    owner = "FOOBAR",
+    from = "FOOBAR"
   ) {
     this.code = code;
     this.process_id = process_id;
     this.module_id = module_id;
-    this.height = 1;
+    this.height = 0;
     this.owner = owner;
     this.from = from;
     this.memory = null;
+    this.handle = null;
   }
   async init() {
-    const handle = await AoLoader(this.wasm, {
+    this.handle = await AoLoader(this.wasm, {
       format: "wasm64-unknown-emscripten-draft_2024_02_15",
     });
     const env = this.createEnv();
     const msg = this.createMsg(this.code, [{ name: "Action", value: "Eval" }]);
-    const result = await handle(null, msg, env);
+    const result = await this.handle(null, msg, env);
     this.memory = result.Memory;
     return result;
+  }
+  async send(DataItem: InputData) {
+    if (this.handle) {
+      const data = this.transformData(DataItem);
+      const msg = this.createMsg(data.Data, data.Tags);
+      const env = this.createEnv();
+      const result = await this.handle(this.memory, msg, env);
+      this.memory = result.Memory;
+      return result;
+    } else {
+      throw new Error("handle not initalized");
+    }
   }
   private createMsg(
     data?: string,
     Tags?: Array<{ name: string; value: string }>
   ) {
+    this.height += 1;
     return {
       Id: this.height,
-      Target: "AOS",
+      Target: this.process_id,
       Owner: this.owner,
       Data: data?.length ? data : "",
       "Block-Height": this.height.toString(),
@@ -71,5 +106,23 @@ export default class AOS {
         ],
       },
     };
+  }
+  private transformData(input: InputData): OutputData {
+    const output: OutputData = { Tags: [] };
+    if (input.Data) output.Data = input.Data;
+    Object.entries(input).forEach(([key, value]) => {
+      if (key !== "Data" && key !== "Tags" && typeof value === "string") {
+        output.Tags.push({ name: key, value });
+      }
+    });
+    input.Tags?.forEach((tag) => {
+      const tagKey = Object.keys(tag)[0];
+      const tagValue = tag[tagKey];
+      if (typeof tagValue === "string") {
+        output.Tags.push({ name: tagKey, value: tagValue });
+      }
+    });
+
+    return output;
   }
 }

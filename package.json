@@ -6,20 +6,23 @@
   "scripts": {
     "test": "node --test test/**/*.test.js",
     "test:sqlite": "FORMAT=wasm32-unknown-emscripten2 WASM=./AOS-SQLITE.wasm node --test test/**/*.test.js",
-    "test:ts": "node --test --require ts-node/register test/**/*.test.ts"
+    "test:ts": "node --experimental-wasm-memory64 -r ts-node/register ./node_modules/.bin/jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@permaweb/ao-loader": "0.0.36",
-    "ts-node": "^10.9.2"
+    "@permaweb/ao-loader": "0.0.36"
   },
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.13",
     "@types/node": "^22.7.3",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
   }
 }
