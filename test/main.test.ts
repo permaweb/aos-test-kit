@@ -1,4 +1,4 @@
-import AOS from "./aos";
+import AOS from "aos";
 import { describe, it, expect } from "@jest/globals";
 import fs from "fs";
 import path from "node:path";
