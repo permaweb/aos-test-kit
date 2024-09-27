@@ -109,9 +109,9 @@ To set up deployment for your AOS process using this repository, you'll need to 
 
 If you don't have a deployment key, use `~/.aos.json` as the default location for your key file.
 
-## SQLite Process Testing
+## SQLite Process Testing and LLama Process Testing
 
-For more advanced scenarios involving state management, you may use SQLite to test your process's interaction with data. This feature is coming soon, and more documentation will follow.
+For more advanced scenarios involving state management, you may use SQLite and LLama to test your process's interaction with data. This feature is coming soon, and more documentation will follow.
 
 ## Contributions
 
