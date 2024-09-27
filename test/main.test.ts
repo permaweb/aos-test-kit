@@ -1,17 +1,17 @@
-import AOS from "aos";
+import aos from "aos";
 import { describe, it, expect } from "@jest/globals";
 import fs from "fs";
 import path from "node:path";
 
 describe("AOS Tests", () => {
-  let env: AOS;
+  let env: aos;
 
   beforeAll(async () => {
     const source = fs.readFileSync(
       path.join(__dirname, "./../src/main.lua"),
       "utf-8"
     );
-    env = new AOS(source);
+    env = new aos(source);
     await env.init();
   });
 

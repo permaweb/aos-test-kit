@@ -20,7 +20,7 @@ interface OutputData {
   Tags: Tag[];
 }
 
-export default class AOS {
+export default class aos {
   wasm = fs.readFileSync(path.join(__dirname) + "/../process.wasm");
   code: string;
   process_id: string;
