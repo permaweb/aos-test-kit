@@ -7,8 +7,8 @@ This repository provides a simple template for building and testing AOS processe
 Clone or create a new repository using this template, and you can begin using test-driven development to build your AOS processes. By writing tests for each step of your process, you ensure that your code is well-structured, testable, and easy to maintain. To Load aos environment paste the following code into your test file:
 
 ```ts
-import { AOS } from "aos";
-const env = new AOS();
+import aos from "aos";
+const env = new aos(source_code);
 ```
 
 ## First Test
