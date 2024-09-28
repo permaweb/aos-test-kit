@@ -18,7 +18,7 @@ In the `test/main.test.ts` file, after setting up your environment, you can begi
 ```ts
 it("should respond with 'hello, world' for Action: hello", async () => {
   const response = await env.send({ Action: "hello" });
-  expect(response.Messages[0].Data).toBe("hello, world");
+  assert.equal(response.Messages[0].Data, "hello, world");
 });
 ```
 
@@ -27,6 +27,7 @@ Save and run your test suite using:
 ```bash
 yarn test
 ```
+
 ## Writing More Tests
 
 You can expand your test suite to cover a variety of actions, input data, and tags. Below are some additional test examples.
@@ -36,7 +37,7 @@ You can expand your test suite to cover a variety of actions, input data, and ta
 ```ts
 it("should respond with 'You have send archlinux' for Action: data", async () => {
   const response = await env.send({ Action: "data", Data: "archlinux" });
-  expect(response.Messages[0].Data).toBe("You have send archlinux");
+  assert.equal(response.Messages[0].Data, "You have send archlinux");
 });
 ```
 
@@ -48,7 +49,10 @@ it("should respond with the correct carname value for Action: tag", async () => 
     Action: "tag",
     Tags: [{ carname: "tesla" }],
   });
-  expect(response.Messages[0].Data).toBe("The Key is `carname` and the value is tesla");
+  assert.equal(
+    response.Messages[0].Data,
+    "The Key is `carname` and the value is tesla"
+  );
 });
 ```
 
@@ -60,7 +64,10 @@ it("should add a key-value pair for Action: set", async () => {
     Action: "set",
     Tags: [{ key: "blockchain" }, { value: "aos" }],
   });
-  expect(response.Messages[0].Data).toBe("Added blockchain as key and aos as value");
+  assert.equal(
+    response.Messages[0].Data,
+    "Added blockchain as key and aos as value"
+  );
 });
 ```
 
@@ -72,24 +79,29 @@ it("should retrieve the correct value for Action: get", async () => {
     Action: "get",
     Tags: [{ keys: "blockchain" }],
   });
-  expect(response.Messages[0].Data).toBe("The value for blockchain is aos");
+  assert.equal(response.Messages[0].Data, "The value for blockchain is aos");
 });
 ```
+
 ## Running Tests
 
-You can run the test suite using Jest or another testing framework by executing:
+You can run the test suite using Node Test runner or another testing framework by executing:
 
 ```bash
 yarn test
 ```
+
 Make sure that your src/main.lua file is properly loaded and contains the logic you're testing.
 
 ## Manual Deployment
+
 You can manually deploy your AOS process by running the following commands:
+
 ```bash
 yarn i --no-fund -g https://get_ao.g8way.io
 aos --load src/main.lua
 ```
+
 This command will load and deploy the process defined in src/main.lua onto your local AOS instance.
 
 ## Deployment to AOS
@@ -100,6 +112,7 @@ You can deploy your AOS process to the AOS instance by running the following com
 yarn i --no-fund -g https://get_ao.g8way.io
 aos --load src/main.lua
 ```
+
 ## Deployment Setup
 
 To set up deployment for your AOS process using this repository, you'll need to configure a few secrets in your GitHub repository:
