@@ -1,19 +1,24 @@
 {
   "name": "ao-test-kit",
-  "type": "module",
   "version": "1.0.0",
   "description": "AOS Integration Test Kit",
   "scripts": {
-    "test": "node --test test/**/*.test.js",
-    "test:sqlite": "FORMAT=wasm32-unknown-emscripten2 WASM=./AOS-SQLITE.wasm node --test test/**/*.test.js"
+    "test:js": "node --test test/**/*.test.js",
+    "test:sqlite": "FORMAT=wasm32-unknown-emscripten2 WASM=./AOS-SQLITE.wasm node --test test/**/*.test.js",
+    "test": "node --experimental-wasm-memory64 --import tsx --test ./test/*.test.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@permaweb/ao-loader": "^0.0.26"
+    "@permaweb/ao-loader": "0.0.36"
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.3",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
   }
 }
